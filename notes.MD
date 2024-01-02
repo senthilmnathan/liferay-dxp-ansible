@@ -62,21 +62,21 @@
       - roles/requirements.yml
          - Update the GIT Repository URL
    - liferay_application_portal
-      - files/liferay_<env>_data_dict.yaml
+      - files/liferay_<<env>>_data_dict.yaml
          - Update this file diligently. Refer to comments for additional information
-      - files/<env>/activation.xml
+      - files/<<env>>/activation.xml
          - Replace the contents with a valid cluster license
-      - files/<env>/app_ssl.cfg
+      - files/<<env>>/app_ssl.cfg
          - Update the DNS Entries. Other values can be provided at run time when executing openssl
-      - files/<env>/app_ssl.csr, files/<env>/app_ssl.key
+      - files/<<env>>/app_ssl.csr, files/<<env>>/app_ssl.key
          - Files Generated when executing openssl command
-      - files/<env>/app_ssl.pem
+      - files/<<env>>/app_ssl.pem
          - Signed Certificate
-      - files/<env>/app_ssl.key.encrypted
+      - files/<<env>>/app_ssl.key.encrypted
          - Generate the encrypted version of certificate key pair using openssl
-      - files/<env>/elastic-nodes.p12
+      - files/<<env>>/elastic-nodes.p12
          - Copy the Elasticsearch Certificate (es_ssl.pem) in P12 Format generated previously for the elasticsearch cluster
-      - files/<env>/keystore.jks
+      - files/<<env>>/keystore.jks
          - Placeholder for the Liferay SAML keystore. Replace this after liferay is configured with SAML (Location: $LIFERAY_HOME/data/keystore.jks)
       - files/patches/
          - Copy all the one off patches that should be applied to the instance
