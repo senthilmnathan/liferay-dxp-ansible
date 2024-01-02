@@ -18,7 +18,7 @@
       - liferay_portal_platform
 
 
-
+```mermaid
 classDiagram
 namespace GIT Repository {
     class liferay_application_infrastructure
@@ -28,3 +28,4 @@ namespace GIT Repository {
 	class liferay_application_portal
 	class liferay-platform-platform
 }
+```
