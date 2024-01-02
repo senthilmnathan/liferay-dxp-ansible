@@ -13,9 +13,9 @@
 - **File Updates**
    - liferay_application_infrastructure
       - tasks/liferay-app-install-playbook.yaml
-          - Line #3, #4, #5
+          - ```Line #3, #4, #5```
       - files/liferay_<env>_data_dict.yaml
-          - env_name: <match the env flag in file name>. Can be dev, uat, etc
+          - ```env_name: <match the env flag in file name>. Can be dev, uat, etc```
    - liferay_elasticsearch_infrastructure
       - files/liferay_<env>_data_dict.yaml
          - Update this file diligently. Refer to comments for additional information
