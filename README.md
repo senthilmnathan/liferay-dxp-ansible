@@ -17,15 +17,13 @@
     -  The wrapper ansible code that ties up the above role is also added
       - liferay_portal_platform
 
-
 ```mermaid
 classDiagram
-namespace GIT Repository {
-    class liferay_application_infrastructure
-    class liferay_elasticsearch_infrastructure
-    class liferay_web_infrastructure
-    class liferay-infrastructure-platform
-    class liferay_application_portal
-    class liferay-platform-platform
+namespace BaseShapes {
+    class Triangle
+    class Rectangle {
+      double width
+      double height
+    }
 }
 ```
