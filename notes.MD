@@ -1,6 +1,6 @@
-- Assumptions
+- **Assumptions**
    - LifeRay uses "/liferay" volume for hosting shared content and "/liferay" is shared across all tomcat servers
-- Pre-Requisites
+- **Pre-Requisites**
    - Artifact Repository
       - Access to a Binary Artifact Repository (such as Artifactory or Nexus) to store binary files
       - Credentials to such repository as required
@@ -10,7 +10,7 @@
       - Generate Server/Instance Specific Certificates
       - Use the same file naming convention for easy administration
 
-- Pre-Requisites
+- **File Updates**
    - liferay_application_infrastructure
       - tasks/liferay-app-install-playbook.yaml
           - Line #3, #4, #5
