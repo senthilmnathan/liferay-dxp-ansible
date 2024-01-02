@@ -1,0 +1,5 @@
+---
+- name: Wrapper to start the main tasks
+  hosts: "{{ liferay_elasticsearch_hosts }}"
+  roles:
+      - {role: liferay_elasticsearch_infrastructure}

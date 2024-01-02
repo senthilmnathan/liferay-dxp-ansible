@@ -1,0 +1,133 @@
+---
+- name: Download Kibana Installation Bundle
+  get_url:
+     url: http://<Artifact Repository URL>/kibana-{{ liferay_es_data.kibana_version }}-x86_64.rpm
+     url_username: <username>
+     url_password: <password>
+     dest: /tmp/kibana-{{ liferay_es_data.kibana_version }}-x86_64.rpm
+
+- name: Install Kibana Package Using DNF
+  dnf:
+    name: /tmp/kibana-{{ liferay_es_data.kibana_version }}-x86_64.rpm
+    state: present
+    disable_gpg_check: true
+
+- name: Place kibana config template
+  ansible.builtin.template:
+    src: templates/kibana.yml
+    dest: /etc/kibana/kibana.yml
+    owner: root
+    group: kibana
+    backup: no
+
+- name: Modify the user 'kibana' shell and login type
+  ansible.builtin.user:
+    name: kibana
+    shell: /bin/bash
+    groups: kibana
+    home: /home/kibana
+
+- name: Create Data Directory if it does not exist
+  ansible.builtin.file:
+    path: /app/kibana/data/
+    state: directory
+    mode: '0755'
+
+- name: Create Log Directory if it does not exist
+  ansible.builtin.file:
+    path: /app/kibana/log/
+    state: directory
+    mode: '0755'
+
+- name: Recursively change ownership of /app/data/
+  ansible.builtin.file:
+    path: /app/kibana/data/
+    state: directory
+    recurse: yes
+    owner: kibana
+    group: kibana
+
+- name: Recursively change ownership of /app/log
+  ansible.builtin.file:
+    path: /app/kibana/log/
+    state: directory
+    recurse: yes
+    owner: kibana
+    group: kibana
+
+- name: Create SSL Directory if it does not exist
+  ansible.builtin.file:
+    path: /etc/kibana/ssl/
+    state: directory
+    mode: '0755'
+
+- name: Recursively change ownership of /etc/kibana/ssl/
+  ansible.builtin.file:
+    path: /etc/kibana/ssl/
+    state: directory
+    recurse: yes
+    owner: kibana
+    group: kibana
+
+- name: Copy SSL Certificate Creation Config File to server
+  copy:
+    src: "files/kibana/{{ env_name }}/kibana_ssl.cfg"
+    dest: "/etc/kibana/ssl/kibana_ssl.cfg"
+    owner: kibana
+    group: kibana
+    mode: 0750
+    backup: no
+
+- name: Copy SSL CER File to server
+  copy:
+    src: "files/kibana/{{ env_name }}/kibana_ssl.csr"
+    dest: "/etc/kibana/ssl/kibana_ssl.csr"
+    owner: kibana
+    group: kibana
+    mode: 0750
+    backup: no
+
+- name: Copy SSL Certificate File to server
+  copy:
+    src: "files/kibana/{{ env_name }}/kibana_ssl.pem"
+    dest: "/etc/kibana/ssl/kibana_ssl.pem"
+    owner: kibana
+    group: kibana
+    mode: 0750
+    backup: no
+
+- name: Copy SSL Key File to server
+  copy:
+    src: "files/kibana/{{ env_name }}/kibana_ssl.key"
+    dest: "/etc/kibana/ssl/kibana_ssl.key"
+    owner: kibana
+    group: kibana
+    mode: 0750
+    backup: no
+
+- name: Copy SSL Certificate Chain File to server
+  copy:
+    src: "files/ssl/eu-ca-chain.pem"
+    dest: "/etc/kibana/ssl/ca-chain.pem"
+    owner: kibana
+    group: kibana
+    mode: 0750
+    backup: no
+
+- name: Copy SSL Certificate File to server
+  copy:
+    src: "files/ssl/{{ env_name }}/es_ssl.pem"
+    dest: "/etc/kibana/ssl/es_ssl.pem"
+    owner: kibana
+    group: kibana
+    mode: 0750
+    backup: no
+
+- name: Copy SSL Key File to server
+  copy:
+    src: "files/ssl/{{ env_name }}/es_ssl.key"
+    dest: "/etc/kibana/ssl/es_ssl.key"
+    owner: kibana
+    group: kibana
+    mode: 0750
+    backup: no

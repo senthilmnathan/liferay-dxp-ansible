@@ -1,0 +1,16 @@
+server.host: "{{ liferay_es_data.kibana_node }}"
+elasticsearch.hosts: [{{ liferay_es_data.kibana_elasticsearch_url }}]
+kibana.index: ".kibana"
+kibana.defaultAppId: "discover"
+elasticsearch.username: "kibana_system"
+elasticsearch.password: "{{ liferay_es_data.kibana_elasticsearch_password }}"
+elasticsearch.ssl.certificate: /etc/kibana/ssl/es_ssl.pem
+elasticsearch.ssl.key: /etc/kibana/ssl/es_ssl.key
+elasticsearch.ssl.certificateAuthorities: [ "/etc/kibana/ssl/ca-chain.pem" ]
+elasticsearch.requestTimeout: 60000
+elasticsearch.preserveHost: true
+server.ssl.enabled: true
+server.ssl.certificate: /etc/kibana/ssl/kibana_ssl.pem
+server.ssl.key: /etc/kibana/ssl/kibana_ssl.key
+pid.file: "/app/kibana/log/kibana.pid"
+logging.dest: /app/kibana/log/kibana.log

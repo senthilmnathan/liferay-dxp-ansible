@@ -1,0 +1,10 @@
+---
+# tasks file for liferay_app
+- name: LifeRay Elasticsearch Infrastructure Deployment Property File Loading
+  include_vars:
+          file: files/liferay_{{ env_name }}_data_dict.yaml
+- name: LifeRay Elasticsearch Infrastructure Deployment Task
+  include_tasks: tasks/liferay-es-install-playbook.yaml
+- name: LifeRay Kibana Infrastructure Deployment Task
+  include_tasks: tasks/liferay-kibana-install-playbook.yaml
+  when: '"{{ liferay_es_data.kibana_node }}" == "{{ inventory_hostname }}"'

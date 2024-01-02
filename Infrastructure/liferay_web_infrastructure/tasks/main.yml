@@ -1,0 +1,7 @@
+---
+# tasks file for liferay_web_infrastructure
+- name: LifeRay Web Deployment Property File Loading
+  include_vars:
+          file: files/liferay_{{ env_name }}_data_dict.yaml
+- name: LifeRay Web Deployment Task
+  include_tasks: tasks/liferay-web-install-playbook.yaml

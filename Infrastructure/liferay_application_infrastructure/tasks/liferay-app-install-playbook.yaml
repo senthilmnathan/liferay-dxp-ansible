@@ -1,0 +1,66 @@
+- name: Download Tomcat Native Package
+  get_url:
+     url: "<Artifact Repository URL>{{ liferay_app_data.tomcatnative_binary }}"
+     url_username: <username>
+     url_password: <password>
+     dest: "/tmp/{{ liferay_app_data.tomcatnative_binary }}"
+- name: Create LifeRay Group with group ID 102
+  group:
+     gid: 102
+     name: liferay
+     state: present
+- name: Create LifeRay User with user ID 101
+  user:
+     group: liferay
+     name: liferay
+     comment: LifeRay Account
+     uid: 101
+     home: /app/liferay 
+     state: present
+     non_unique: yes
+- name: Install Tomcat Native Performance Runtime Using DNF
+  dnf:
+    name: apr-util
+    state: present
+    disable_gpg_check: true
+- name: Install Tomcat Native Performance Runtime Using DNF
+  dnf:
+    name: apr
+    state: present
+    disable_gpg_check: true
+- name: Install Tomcat Native Package Using DNF
+  dnf:
+    name: "/tmp/{{ liferay_app_data.tomcatnative_binary }}"
+    state: present
+    disable_gpg_check: true
+- name: Install Latest available version of RedHat Open JDK 11
+  dnf:
+    name: java-11-openjdk
+    state: present
+- name: Copy modified Limits.conf file to server
+  template:
+    src: "templates/limits.conf"
+    dest: /etc/security/limits.conf
+    owner: root
+    group: root
+    mode: '0644'
+    backup: no
+- name: Copy modified Sysctl.conf file to server
+  template:
+    src: "templates/sysctl.conf"
+    dest: /etc/sysctl.conf
+    owner: root
+    group: root
+    mode: '0644'
+    backup: no
+- name: Update Kernel Configuration
+  command: /usr/sbin/sysctl -p
+  ignore_errors: True
+- name: Copy LogRotate Configuration File to server
+  template:
+    src: "templates/tomcat"
+    dest: "/etc/logrotate.d/tomcat"
+    mode: 0750
+    owner: root
+    group: root
+    backup: no

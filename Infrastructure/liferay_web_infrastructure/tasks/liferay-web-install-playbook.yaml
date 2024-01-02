@@ -1,0 +1,96 @@
+---
+- name: Install Apache Native Runtime package
+  dnf:
+    name: apr
+    state: present
+- name: Install Apache Native Runtime package
+  dnf:
+    name: apr-util
+    state: present
+- name: Install Nginx package
+  dnf:
+    name: nginx
+    state: present
+- name: Update SELinux Configuration on Server
+  command: /usr/sbin/setsebool -P httpd_can_network_connect=1
+  ignore_errors: True
+- name: Create Nginx Root Directory
+  file:
+     path: /app/html
+     mode: 0755
+     owner: root
+     group: root
+     state: directory
+- name: Create Nginx Cache Directory
+  file:
+     path: /var/cache/nginx/liferay_cache
+     mode: 0755
+     owner: nginx
+     group: root
+     state: directory
+- name: Copy Limits.conf to server
+  copy:
+    src: files/limits.conf
+    dest: /etc/security/limits.conf
+    owner: root
+    group: root
+    mode: '0750'
+    backup: no
+- name: Copy LifeRay proxy Configuration file to server
+  template:
+    src: templates/liferay.conf
+    dest: /etc/nginx/conf.d/liferay.conf
+    owner: root
+    group: root
+    mode: '0644'
+    backup: no
+- name: Copy SSL Certificate and Key file to Server
+  copy:
+    src: files/ssl/{{ env_name }}/
+    dest: /etc/nginx/ssl
+    owner: root
+    group: root
+    mode: '0750'
+    backup: no
+- name: Copy Deflate Configuration File to Server
+  copy:
+    src: files/deflate.conf
+    dest: /etc/nginx/conf.d/deflate.conf
+    owner: root
+    group: root
+    mode: '0750'
+    backup: no
+- name: COpy Modified Nginx.conf file to server
+  template:
+    src: templates/nginx.conf
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: '0750'
+    backup: no
+- name: Copy modified Limits.conf file to server
+  template:
+    src: "templates/limits.conf"
+    dest: /etc/security/limits.conf
+    owner: root
+    group: root
+    mode: '0644'
+    backup: no
+- name: Copy modified Sysctl.conf file to server
+  template:
+    src: "templates/sysctl.conf"
+    dest: /etc/sysctl.conf
+    owner: root
+    group: root
+    mode: '0644'
+    backup: no
+- name: Update Kernel Configuration
+  command: /usr/sbin/sysctl -p
+  ignore_errors: True
+- name: Update SELinux Configuration on Server
+  command: chcon -R -u system_u -r object_r -t httpd_sys_content_t /app
+  ignore_errors: True
+- name: Allow Nginx to change httpd.rlimit
+  command: setsebool httpd.rlimit on
+  ignore_errors: True
+

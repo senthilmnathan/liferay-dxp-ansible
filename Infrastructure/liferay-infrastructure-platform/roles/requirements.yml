@@ -1,0 +1,12 @@
+# Source Web Repository from icon bitbucket
+- src: ssh://git@<repository-url>/liferay_web_infrastructure.git
+  name: liferay_web_infrastructure
+  scm: git
+# Source App Repository from icon bitbucket
+- src: ssh://git@<repository-url>/liferay_application_infrastructure.git
+  name: liferay_application_infrastructure
+  scm: git
+# Source Elasticsearch Repository from icon bitbucket
+- src: ssh://git@<repository-url>/liferay_elasticsearch_infrastructure.git
+  name: liferay_elasticsearch_infrastructure
+  scm: git

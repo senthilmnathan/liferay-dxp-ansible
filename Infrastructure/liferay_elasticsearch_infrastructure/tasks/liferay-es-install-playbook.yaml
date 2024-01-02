@@ -1,0 +1,180 @@
+---
+- name: Download Elasticsearch Installation Bundle
+  get_url:
+     url: http://<Artifact Repository URL>/{{ liferay_es_data.elasticsearch_version }}-x86_64.rpm
+     url_username: <username>
+     url_password: <password>
+     dest: /tmp/elasticsearch-{{ liferay_es_data.elasticsearch_version }}-x86_64.rpm
+
+- name: Download Elasticsearch Plugins
+  get_url:
+     url: http://<Artifact Repository URL>/{{ item }}-{{ liferay_es_data.elasticsearch_version }}.zip
+     url_username: <username>
+     url_password: <password>
+     dest: /tmp/{{ item }}-{{ liferay_es_data.elasticsearch_version }}.zip
+  loop: "{{ liferay_es_data.elasticsearch_plugin_list }}"
+
+- name: Install Elasticsearch  Package Using DNF
+  dnf:
+    name: /tmp/elasticsearch-{{ liferay_es_data.elasticsearch_version }}-x86_64.rpm
+    state: present
+    disable_gpg_check: true
+
+- name: Place elasticsearch config template
+  ansible.builtin.template:
+    src: templates/elasticsearch.yml
+    dest: /etc/elasticsearch/elasticsearch.yml
+    owner: root
+    group: elasticsearch
+    backup: no
+
+- name: Modify the user 'elasticsearch' shell and login type
+  ansible.builtin.user:
+    name: elasticsearch
+    shell: /bin/bash
+    groups: elasticsearch
+    home: /home/elasticsearch
+
+- name: Place jvm.options config template
+  ansible.builtin.template:
+    src: templates/jvm.options
+    dest: /etc/elasticsearch/jvm.options
+    owner: root
+    group: elasticsearch
+    backup: no
+
+- name: Update sysctl.conf
+  copy:
+    src: files/sysctl.conf
+    dest: /etc/sysctl.conf
+    owner: root
+    group: root
+    backup: no
+
+- name: Update limits.conf
+  copy:
+    src: files/limits.conf
+    dest: /etc/security/limits.conf
+    owner: root
+    group: root
+    backup: no
+
+- name: Create Data Directory if it does not exist
+  ansible.builtin.file:
+    path: /app/data/
+    state: directory
+    mode: '0755'
+
+- name: Create Log Directory if it does not exist
+  ansible.builtin.file:
+    path: /app/log/
+    state: directory
+    mode: '0755'
+
+- name: Create TMP Directory to overcome JNA Error during startup
+  ansible.builtin.file:
+    path: /app/log/tmp/
+    state: directory
+    mode: '0755'
+
+- name: Recursively change ownership of /app/data/
+  ansible.builtin.file:
+    path: /app/data/
+    state: directory
+    recurse: yes
+    owner: elasticsearch
+    group: elasticsearch
+
+- name: Recursively change ownership of /app/log
+  ansible.builtin.file:
+    path: /app/log/
+    state: directory
+    recurse: yes
+    owner: elasticsearch
+    group: elasticsearch
+
+- name: Update Kernel Configuration
+  command: /usr/sbin/sysctl -p
+  ignore_errors: True
+
+- name: Edit Elasticsearch Service Init Script to Add LimitMEMLOCK=infinity
+  ansible.builtin.lineinfile:
+    dest: /usr/lib/systemd/system/elasticsearch.service
+    insertafter: "^[Service]"
+    line: "LimitMEMLOCK=infinity"
+    firstmatch: yes
+    state: present
+
+- name: Reload systemctl Daemon
+  command: /usr/bin/systemctl daemon-reload
+  ignore_errors: True
+
+
+- name: Create SSL Directory if it does not exist
+  ansible.builtin.file:
+    path: /etc/elasticsearch/ssl/
+    state: directory
+    mode: '0755'
+
+- name: Recursively change ownership of /etc/elasticsearch/ssl/
+  ansible.builtin.file:
+    path: /etc/elasticsearch/ssl/
+    state: directory
+    recurse: yes
+    owner: elasticsearch
+    group: elasticsearch
+
+- name: Copy SSL Certificate Creation Config File to server
+  copy:
+    src: "files/ssl/{{ env_name }}/es_ssl.cfg"
+    dest: "/etc/elasticsearch/ssl/es_ssl.cfg"
+    owner: elasticsearch
+    group: elasticsearch
+    mode: 0750
+    backup: no
+
+- name: Copy SSL CER File to server
+  copy:
+    src: "files/ssl/{{ env_name }}/es_ssl.csr"
+    dest: "/etc/elasticsearch/ssl/es_ssl.csr"
+    owner: elasticsearch
+    group: elasticsearch
+    mode: 0750
+    backup: no
+
+- name: Copy SSL Certificate File to server
+  copy:
+    src: "files/ssl/{{ env_name }}/es_ssl.pem"
+    dest: "/etc/elasticsearch/ssl/es_ssl.pem"
+    owner: elasticsearch
+    group: elasticsearch
+    mode: 0750
+    backup: no
+
+- name: Copy SSL Key File to server
+  copy:
+    src: "files/ssl/{{ env_name }}/es_ssl.key"
+    dest: "/etc/elasticsearch/ssl/es_ssl.key"
+    owner: elasticsearch
+    group: elasticsearch
+    mode: 0750
+    backup: no
+
+- name: Copy SSL Certificate Chain File to server
+  copy:
+    src: "files/ssl/eu-ca-chain.pem"
+    dest: "/etc/elasticsearch/ssl/ca-chain.pem"
+    owner: elasticsearch
+    group: elasticsearch
+    mode: 0750
+    backup: no
+
+- name: Remove Elasticsearch Plugins
+  command: /usr/share/elasticsearch/bin/elasticsearch-plugin remove {{ item }}
+  ignore_errors: True
+  loop: "{{ liferay_es_data.elasticsearch_plugin_list }}"
+
+- name: Install Elasticsearch plugins
+  command: /usr/share/elasticsearch/bin/elasticsearch-plugin install file:///tmp/{{ item }}-{{ liferay_es_data.elasticsearch_version }}.zip
+  ignore_errors: True
+  loop: "{{ liferay_es_data.elasticsearch_plugin_list }}"

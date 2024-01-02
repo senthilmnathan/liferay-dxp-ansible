@@ -1,0 +1,8 @@
+---
+liferay_app_data:
+  env_name: dev                                                 #Type of Environment, dev, uat, tst, prod. Only used to identify data dictionary file
+  tomcatnative_binary: tomcat-native-1.2.23-1.el8.x86_64.rpm    #name of the Package stored in Artifact Repository
+  liferay_home: /app/liferay/liferay-dxp-7.4.13.u20/            #Liferay Home
+  tomcat_version: tomcat-9.0.56                                 #Version of tomcat associated with the liferay update release installed
+  limits_memlock: 20971520                                      #Change as required for the environment
+  sysctl_hugepages: 10240                                       #Change as required for the environment

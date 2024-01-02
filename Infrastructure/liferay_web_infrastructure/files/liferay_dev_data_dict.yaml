@@ -1,0 +1,29 @@
+---
+liferay_web_data:
+  liferay_app_list:                                         #List of all liferay application server hosts
+    - <host-1>              
+    - <host-2>
+    - <host-3>
+  domain: <liferay domain DNS URL>                          #DNS Name of Liferay Portal URL. Example: myliferayportal.com
+  hash_bucket_size: 128
+  worker_connections: 20480
+  worker_rlimit_nofile: 102400
+  soft_limit: 102400
+  hard_limit: 102400
+  file_max: 102400
+  keepalive_timeout:  65
+  keepalive_requests: 512
+  types_hash_max_size: 2048
+  client_max_body_size: 0
+  proxy_read_timeout: 3600
+  proxy_connect_timeout: 3600
+  proxy_send_timeout: 3600
+  send_timeout: 3600
+
+friendly_urls:                                              #Use this if friendly URL must be setup of various liferay sites                                          
+  <friendly url-1>:                                         #Array Index. Use same name as friendly URL
+    domain: <friendly url-1>                                #Example: mysite.myliferayportal.com
+    redirection: <liferay site name>                        #Example: group/mysite
+  <friendly url-2>:
+    domain: <friendly url-2>
+    redirection: <liferay site name>

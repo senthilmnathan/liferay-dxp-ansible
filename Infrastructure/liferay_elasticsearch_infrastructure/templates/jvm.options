@@ -1,0 +1,10 @@
+-Xms{{ liferay_es_data.xms }}m
+-Xmx{{  liferay_es_data.xmx }}m
+-XX:+UseG1GC
+-Djava.io.tmpdir=${ES_TMPDIR}
+-XX:+HeapDumpOnOutOfMemoryError
+-XX:HeapDumpPath=/var/lib/elasticsearch
+-XX:ErrorFile=/var/log/elasticsearch/hs_err_pid%p.log
+-Xlog:gc*,gc+age=trace,safepoint:file=/var/log/elasticsearch/gc.log:utctime,pid,tags:filecount=32,filesize=64m
+-Dlog4j2.formatMsgNoLookups=true
+-Djna.tmpdir=/app/log/tmp

@@ -1,0 +1,46 @@
+cluster.name: {{ liferay_es_data.cluster_name }}
+node.name: {{ ansible_fqdn }}
+network.host: {{ ansible_fqdn }}
+discovery.type: {{ liferay_es_data.cluster_enabled }}
+discovery.zen.ping.unicast.hosts: [{{ liferay_es_data.discovery_unicast_hosts }}]
+path.data: /app/data/
+path.logs: /app/log/
+
+network.bind_host: {{ ansible_fqdn }}
+network.publish_host: {{ ansible_fqdn }}
+xpack.notification.email.account:
+  exchange_account:
+    smtp:
+      auth: false
+      host: {{ liferay_es_data.relay_server_dns }}
+      port: 25
+    email_defaults:
+      from: 'elasticsearch-noreply@iconplc.com'
+xpack.security.enabled: true
+xpack.security.authc.realms:
+    native.realm1:
+        order: 0
+    active_directory:
+      my_ad:
+        order: 1
+        domain_name: iconcr.com
+        url: "{{ liferay_es_data.auth_domain_name }}"
+xpack.monitoring.exporters.my_local:
+  type: local
+  use_ingest: false
+xpack.monitoring.enabled: true
+xpack.monitoring.history.duration: 10d
+discovery.zen.minimum_master_nodes: 2
+http.port: 9200
+xpack.security.transport.ssl.enabled: true
+xpack.security.transport.ssl.verification_mode: certificate
+xpack.security.transport.ssl.key: /etc/elasticsearch/ssl/es_ssl.key
+xpack.security.transport.ssl.certificate: /etc/elasticsearch/ssl/es_ssl.pem
+xpack.security.transport.ssl.certificate_authorities: [ "/etc/elasticsearch/ssl/ca-chain.pem" ]
+xpack.security.transport.ssl.key_passphrase: {{ liferay_es_data.ssl_passphrase }}
+xpack.security.http.ssl.enabled: true
+xpack.security.http.ssl.key:  /etc/elasticsearch/ssl/es_ssl.key
+xpack.security.http.ssl.certificate: /etc/elasticsearch/ssl/es_ssl.pem
+xpack.security.http.ssl.certificate_authorities: [ "/etc/elasticsearch/ssl/ca-chain.pem" ]
+xpack.security.http.ssl.key_passphrase: {{ liferay_es_data.ssl_passphrase }}
+bootstrap.memory_lock: true

@@ -1,0 +1,21 @@
+---
+liferay_es_data:
+  env_name: dev                                         #Type of Environment, dev, uat, tst, prod. Used in identifying the SSL certificates and data dictionary files
+  cluster_name: liferay_es_cluster                      #Identifiable name of elasticsearch cluster
+  cluster_enabled: multi-node                           #single-node or multi-node. If single node is selected, requires manual fix due to product bug
+  elasticsearch_version: 7.17.3                         #Version of Elasticsearch
+  kibana_version: 7.17.3                                #Version of Kibana
+  xms: 16384                                            #Initial Heap Memory of Elasticsearch JVM
+  xmx: 16384                                            #Max Heap Memory of Elasticsearch JVM
+  discovery_unicast_hosts: '"<host-1>", "<host-2>", "<host-3>"'                 #Elasticsearch hosts
+  kibana_node: <host-1>                                                         #Kibana Host
+  kibana_elasticsearch_url: '"https://<host-1>:9200","https://<host-2>:9200","https://<host-3>:9200"'
+  kibana_elasticsearch_password: <PASSWORD>                                     #Password for elasticsearch account
+  relay_server_dns: <relay DNS>                                                 # Relay Server DNS URL
+  auth_domain_name: <LDAP AUTH Domain name>                                     # LDAP Authentication Domain Name in the format ldap://<ldap dns>:<ldap port>
+  ssl_passphrase: <ssl password>                                                # SSL key pair password
+  elasticsearch_plugin_list:
+    - analysis-kuromoji
+    - analysis-smartcn
+    - analysis-icu
+    - analysis-stempel

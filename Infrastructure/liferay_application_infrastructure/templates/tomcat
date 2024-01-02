@@ -1,0 +1,32 @@
+{{ liferay_app_data.liferay_home }}/logs/liferay.*.xml {
+    copytruncate
+    daily
+    rotate 25
+    compress
+    missingok
+    size 100M
+}
+{{ liferay_app_data.liferay_home }}/logs/liferay.*.log {
+    copytruncate
+    daily
+    rotate 25
+    compress
+    missingok
+    size 100M
+}
+{{ liferay_app_data.liferay_home }}/{{ liferay_app_data.tomcat_version }}/logs/catalina.out {
+    copytruncate
+    daily
+    rotate 25
+    compress
+    missingok
+    size 100M
+}
+{{ liferay_app_data.liferay_home }}/{{ liferay_app_data.tomcat_version }}/logs/liferay_access_log.????-??-??.log {
+    copytruncate
+    daily
+    rotate 25
+    compress
+    missingok
+    size 100M
+}

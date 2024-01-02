@@ -1,0 +1,5 @@
+---
+- name: Wrapper to start the main tasks
+  hosts: "{{ liferay_app_hosts }}"
+  roles:
+      - {role: liferay_application_infrastructure}
