@@ -1,0 +1,14 @@
+<Context crossContext="true">
+	<JarScanner className="com.liferay.support.tomcat.util.scan.NOPJarScanner" />
+	<Resource name="jdbc/LiferayPool" auth="Container"
+              factory="com.zaxxer.hikari.HikariJNDIFactory"
+              type="javax.sql.DataSource"
+              minimumIdle="10"
+              maxLifetime="0"
+              maximumPoolSize="85"
+              driverClassName="com.mysql.jdbc.Driver"
+              dataSource.user="{{ liferay_app_data.database_username }}"
+              dataSource.password="{{ liferay_app_data.database_password }}" 
+	      jdbcUrl="jdbc:mysql://{{ liferay_app_data.database_hostname }}:3306/portal?characterEncoding=UTF8&amp;dontTrackOpenResources=true&amp;holdResultsOpenOverStatementClose=true&amp;useFastDateParsing=false&amp;useUnicode=true&amp;useSSL=false"
+	/>
+</Context>

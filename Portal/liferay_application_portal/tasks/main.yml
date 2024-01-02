@@ -1,0 +1,7 @@
+---
+# tasks file for liferay_application_platform
+- name: LifeRay Application Platform Deployment Property File Loading
+  include_vars:
+          file: files/liferay_{{ env_name }}_data_dict.yaml
+- name: LifeRay Application Platform  Deployment Task
+  include_tasks: tasks/liferay-app-install-playbook.yaml

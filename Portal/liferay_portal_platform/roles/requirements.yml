@@ -1,0 +1,4 @@
+# Source Portal Repository from icon bitbucket
+- src: ssh://git@<repository-url>/liferay_application_portal.git
+  name: liferay_application_portal
+  scm: git

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Server port="8005" shutdown="SHUTDOWN">
+  <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
+  <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+  <GlobalNamingResources>
+    <Resource name="UserDatabase" auth="Container"
+              type="org.apache.catalina.UserDatabase"
+              description="User database that can be updated and saved"
+              factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+              pathname="conf/tomcat-users.xml" />
+  </GlobalNamingResources>
+  <Service name="Catalina">
+    <Connector port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" URIEncoding="UTF-8" />
+    <Connector port="8443" protocol="org.apache.coyote.http11.Http11AprProtocol"
+               maxThreads="{{ liferay_app_data.tomcat_maxthreads }}" minSpareThreads="{{ liferay_app_data.tomcat_minsparethreads }}" maxHttpHeaderSize="{{ liferay_app_data.tomcat_maxhttpheadersize }}" maxConnections="{{ liferay_app_data.tomcat_maxconnections }}" SSLEnabled="true" scheme="https" secure="true" proxyPort="443" >
+        <UpgradeProtocol className="org.apache.coyote.http2.Http2Protocol" />
+        <SSLHostConfig>
+            <Certificate certificateKeyFile="conf/app_ssl.key"
+                         certificateFile="conf/app_ssl.pem"
+                         certificateChainFile="conf/eu-ca-chain.pem"
+                         type="RSA" />
+        </SSLHostConfig>
+    </Connector>
+    <Engine name="Catalina" defaultHost="localhost" jvmRoute="{{inventory_hostname}}">
+      <Cluster
+        channelSendOptions="8"
+        channelStartOptions="3"
+        className="org.apache.catalina.ha.tcp.SimpleTcpCluster">
+        <Manager
+          className="org.apache.catalina.ha.session.DeltaManager"
+          expireSessionsOnShutdown="false"
+          notifyListenersOnReplication="true"
+        />
+        <Channel className="org.apache.catalina.tribes.group.GroupChannel">
+          <Sender className="org.apache.catalina.tribes.transport.ReplicationTransmitter">
+            <Transport className="org.apache.catalina.tribes.transport.nio.PooledParallelSender" />
+          </Sender>
+          <Receiver className="org.apache.catalina.tribes.transport.nio.NioReceiver"
+            address="auto"
+            port="4010"
+            autoBind="100"
+            selectorTimeout="5000"
+            maxThreads="6"
+          />
+          <Interceptor className="org.apache.catalina.tribes.group.interceptors.TcpPingInterceptor" staticOnly="true"/>
+          <Interceptor className="org.apache.catalina.tribes.group.interceptors.TcpFailureDetector" />
+          <Interceptor className="org.apache.catalina.tribes.group.interceptors.MessageDispatchInterceptor"/>
+          <Membership className="org.apache.catalina.tribes.membership.McastService"
+            address="229.0.{{ liferay_app_data.env_id }}.4"
+            port="45574"
+            frequency="500"
+            dropTime="3000"
+            bind="ens192"
+          />
+        </Channel>
+        <Valve className="org.apache.catalina.ha.tcp.ReplicationValve" filter=".*.gif;.*.js;.*.jpg;.*.png;.*.htm;.*.html;.*.css;.*.txt;" />
+        <Valve className="org.apache.catalina.ha.session.JvmRouteBinderValve"/>
+        <Deployer className="org.apache.catalina.ha.deploy.FarmWarDeployer"
+            tempDir="/tmp/war-temp/"
+            deployDir="/tmp/war-deploy/"
+            watchDir="/tmp/war-listen/"
+            watchEnabled="false"/>
+        <ClusterListener className="org.apache.catalina.ha.session.ClusterSessionListener" />
+      </Cluster>
+      <Realm className="org.apache.catalina.realm.LockOutRealm">
+        <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
+               resourceName="UserDatabase"/>
+      </Realm>
+      <Host name="localhost"  appBase="webapps"
+            unpackWARs="true" autoDeploy="true">
+        <Valve className="org.apache.catalina.valves.RemoteIpValve" prefix="liferay_access_log" suffix=".log"
+            internalProxies="{{ liferay_app_data.tomcat_internal_proxies }}"
+            remoteIpHeader="x-forwarded-for" proxiesHeader="x-forwarded-by" protocolHeader="x-forwarded-proto" />
+        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs" prefix="liferay_access_log" suffix=".log"
+            pattern="%{X-Forwarded-For}i %l %u %t &quot;%r&quot; %s %b &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; %T"/>
+      </Host>
+    </Engine>
+  </Service>
+</Server>

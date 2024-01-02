@@ -1,0 +1,280 @@
+---
+- name: Download LifeRay Installation Bundle
+  get_url:
+     url: "http://<Repository URL>/{{ liferay_app_data.liferay_binary }}"
+     url_username: <username>
+     url_password: <password>
+     dest: "/tmp/{{ liferay_app_data.liferay_binary }}"
+     mode: 0755
+- name: Download LifeRay Patching Tool
+  get_url: 
+     url: "http://<Repository URL>/{{ liferay_app_data.patchingtool_binary }}"
+     url_username: <username>
+     url_password: <password>
+     dest: "/tmp/{{ liferay_app_data.patchingtool_binary }}"
+     mode: 0755
+- name: Extract LifeRay Bundled Binary Package 
+  unarchive:
+     src: "/tmp/{{ liferay_app_data.liferay_binary }}"
+     dest: /app/liferay/
+     mode: 0750
+     owner: liferay
+     group: liferay
+     remote_src: yes
+     mode: 0755
+  become: yes
+  become_user: liferay
+- name: Extract Latest version of Patching Tool
+  unarchive:
+     src: "/tmp/{{ liferay_app_data.patchingtool_binary }}"
+     dest: "{{ liferay_app_data.liferay_home }}/"
+     mode: 0750
+     owner: liferay
+     group: liferay
+     remote_src: yes
+  become: yes
+  become_user: liferay
+- name: Copy tomcat server.xml file
+  template:
+    src: "templates/server.xml"
+    dest: "{{ liferay_app_data.liferay_home }}/{{ liferay_app_data.tomcat_version }}/conf/server.xml"
+    owner: liferay
+    group: liferay
+    mode: '0644'
+    backup: no
+  become: yes
+  become_user: liferay
+- name: Copy LifeRay ROOT.xml to server
+  template:
+    src: "templates/ROOT.xml"
+    dest: "{{ liferay_app_data.liferay_home }}/{{ liferay_app_data.tomcat_version }}/conf/Catalina/localhost"
+    mode: 0750
+    owner: liferay
+    group: liferay
+    backup: no
+  become: yes
+  become_user: liferay
+- name: Copy Tomcat web.xml to server
+  template:
+    src: "templates/web.xml"
+    dest: "{{ liferay_app_data.liferay_home }}/{{ liferay_app_data.tomcat_version }}/conf/web.xml"
+    mode: 0750
+    owner: liferay
+    group: liferay
+    backup: no
+  become: yes
+  become_user: liferay
+- name: Copy Tomcat setenv.sh file to server
+  template:
+    src: "templates/setenv.sh"
+    dest: "{{ liferay_app_data.liferay_home }}/{{ liferay_app_data.tomcat_version }}/bin/setenv.sh"
+    mode: 0750
+    owner: liferay
+    group: liferay
+    backup: no
+  become: yes
+  become_user: liferay
+- name: Copy LifeRay portal-ext.properties to server
+  template:
+    src: "templates/portal-ext.properties"
+    dest: "{{ liferay_app_data.liferay_home }}/portal-ext.properties"
+    mode: 0750
+    owner: liferay
+    group: liferay
+    backup: no
+  become: yes
+  become_user: liferay
+- name: Copy LifeRay web.xml to server
+  copy:
+    src: "files/web.xml"
+    dest: "{{ liferay_app_data.liferay_home }}/{{ liferay_app_data.tomcat_version }}/webapps/ROOT/WEB-INF/web.xml"
+    owner: liferay
+    group: liferay
+    mode: '0644'
+    backup: no
+  become: yes
+  become_user: liferay
+- name: Copy JMX Access File to server
+  copy:
+    src: "files/jmx.access"
+    dest: "{{ liferay_app_data.liferay_home }}/{{ liferay_app_data.tomcat_version }}/conf/jmx.access"
+    owner: liferay
+    group: liferay
+    mode: '0644'
+    backup: no
+  become: yes
+  become_user: liferay
+- name: Copy JMX Password File to server
+  copy:
+    src: "files/jmx.password"
+    dest: "{{ liferay_app_data.liferay_home }}/{{ liferay_app_data.tomcat_version }}/conf/jmx.password"
+    owner: liferay
+    group: liferay
+    mode: '0400'
+    backup: no
+  become: yes
+  become_user: liferay
+- name: Download MySQL JDBC Jar file to server
+  get_url:
+     url: http://<Repository URL>/mysql.jar
+     url: http://<Repository URL>/mysql.jar
+     url_username: <username>
+     url_password: <password>
+     dest: "{{ liferay_app_data.liferay_home }}/{{ liferay_app_data.tomcat_version }}/webapps/ROOT/WEB-INF/shielded-container-lib/mysql.jar"
+     mode: 0750
+     owner: liferay
+     group: liferay
+  become: yes
+  become_user: liferay
+- name: Copy SSL CER File to server
+  copy:
+    src: "files/{{ env_name }}/app_ssl.csr"
+    dest: "{{ liferay_app_data.liferay_home }}/{{ liferay_app_data.tomcat_version }}/conf/app_ssl.csr"
+    owner: liferay
+    group: liferay
+    mode: 0750
+    backup: no
+  become: yes
+  become_user: liferay
+- name: Copy SSL Certificate File to server
+  copy:
+    src: "files/{{ env_name }}/app_ssl.pem"
+    dest: "{{ liferay_app_data.liferay_home }}/{{ liferay_app_data.tomcat_version }}/conf/app_ssl.pem"
+    owner: liferay
+    group: liferay
+    mode: 0750
+    backup: no
+  become: yes
+  become_user: liferay
+- name: Copy SSL Key File to server
+  copy:
+    src: "files/{{ env_name }}/app_ssl.key"
+    dest: "{{ liferay_app_data.liferay_home }}/{{ liferay_app_data.tomcat_version }}/conf/app_ssl.key"
+    owner: liferay
+    group: liferay
+    mode: 0750
+    backup: no
+  become: yes
+  become_user: liferay
+- name: Copy SSL Certificate Creation Config File to server
+  copy:
+    src: "files/{{ env_name }}/app_ssl.cfg"
+    dest: "{{ liferay_app_data.liferay_home }}/{{ liferay_app_data.tomcat_version }}/conf/app_ssl.cfg"
+    owner: liferay
+    group: liferay
+    mode: 0750
+    backup: no
+  become: yes
+  become_user: liferay
+- name: Copy SSL Certificate Chain File to server
+  copy:
+    src: "files/ca-chain.pem"
+    dest: "{{ liferay_app_data.liferay_home }}/{{ liferay_app_data.tomcat_version }}/conf/ca-chain.pem"
+    owner: liferay
+    group: liferay
+    mode: 0750
+    backup: no
+  become: yes
+  become_user: liferay
+- name: Copy Elasticsearch connector SSL certificate
+  copy:
+    src: "files/{{ env_name }}/elastic-nodes.p12"
+    dest: "{{ liferay_app_data.liferay_home }}/osgi/configs/elastic-nodes.p12"
+    owner: liferay
+    group: liferay
+    mode: '0644'
+    backup: no
+  become: yes
+  become_user: liferay
+- name: Copy Elasticsearch connector configuration file
+  template:
+    src: "templates/ElasticsearchConfiguration.config"
+    dest: "{{ liferay_app_data.liferay_home }}/osgi/configs/com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config"
+    owner: liferay
+    group: liferay
+    mode: '0644'
+    backup: no
+  become: yes
+  become_user: liferay
+- name: Copy Shared NFS File Store configuration file
+  copy:
+    src: "files/AdvancedFileSystemStoreConfiguration.config"
+    dest: "{{ liferay_app_data.liferay_home }}/osgi/configs/com.liferay.portal.store.file.system.configuration.AdvancedFileSystemStoreConfiguration.config"
+    owner: liferay
+    group: liferay
+    mode: '0644'
+    backup: no
+  become: yes
+  become_user: liferay
+- name: Copy Activation Key File
+  copy:
+    src: "files/{{ env_name }}/activation.xml"
+    dest: "{{ liferay_app_data.liferay_home }}/osgi/modules/activation.xml"
+    owner: liferay
+    group: liferay
+    mode: '0644'
+    backup: no
+  become: yes
+  become_user: liferay
+- name: Copy Logging.properties
+  copy:
+    src: "files/logging.properties"
+    dest: "{{ liferay_app_data.liferay_home }}/{{ liferay_app_data.tomcat_version }}/conf/logging.properties"
+    owner: liferay
+    group: liferay
+    mode: '0644'
+    backup: no
+  become: yes
+  become_user: liferay
+- name: Copy JQuery configuration file
+  template:
+    src: "templates/com.liferay.frontend.js.jquery.web.internal.configuration.JSJQueryConfiguration.config"
+    dest: "{{ liferay_app_data.liferay_home }}/osgi/configs/com.liferay.frontend.js.jquery.web.internal.configuration.JSJQueryConfiguration.config"
+    owner: liferay
+    group: liferay
+    mode: '0644'
+    backup: no
+  become: yes
+  become_user: liferay
+- name: Copy Freemarker configuration file
+  template:
+    src: "templates/com.liferay.portal.template.freemarker.configuration.FreeMarkerEngineConfiguration.config"
+    dest: "{{ liferay_app_data.liferay_home }}/osgi/configs/com.liferay.portal.template.freemarker.configuration.FreeMarkerEngineConfiguration.config"
+    owner: liferay
+    group: liferay
+    mode: '0644'
+    backup: no
+  become: yes
+  become_user: liferay
+- name: Copy Liferay URL Redirection Configuration file
+  template:
+    src: "templates/com.liferay.redirect.internal.configuration.RedirectURLConfiguration.config"
+    dest: "{{ liferay_app_data.liferay_home }}/osgi/configs/com.liferay.redirect.internal.configuration.RedirectURLConfiguration.config"
+    owner: liferay
+    group: liferay
+    mode: '0644'
+    backup: no
+  become: yes
+  become_user: liferay
+
+- name: Copy LifeRay Patches
+  copy:
+    src: "files/patches"
+    dest:  "{{ liferay_app_data.liferay_home }}/patching-tool/"
+    owner: liferay
+    group: liferay
+    mode: '0644'
+    backup: no
+  become: yes
+  become_user: liferay
+
+- name: Copy LifeRay SAML keystore file to server
+  copy:
+    src: "files/{{ env_name }}/keystore.jks"
+    dest: "{{ liferay_app_data.liferay_home }}/data/keystore.jks"
+    owner: liferay
+    group: liferay
+    mode: '0644'
+    backup: no
+  become: yes
+  become_user: liferay

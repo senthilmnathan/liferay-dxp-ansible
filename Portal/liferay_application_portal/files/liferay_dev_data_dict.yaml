@@ -1,0 +1,23 @@
+---
+liferay_app_data:
+  env_name: dev                                                  #Instance Type, dev, uat, prd etc. used to identify the instance specific files
+  env_id: 2                                                      #Used to generate unique cluster IPs. In the case of an environment with multiple liferay instances (dev, tst) use different IDs 
+  liferay_binary: liferay-dxp-tomcat-7.4.13.u20-20220408150343170.tar.gz    #Binary File uploaded in the Binary Artifact Repository
+  patchingtool_binary: patching-tool-3.0.33.zip                             #Patching tool file uploaded in the Binary Artifact Repository
+  tomcatnative_binary: tomcat-native-1.2.23-1.el8.x86_64.rpm                #Tomcat Native package file uploaded in the Binary Artifact Repository
+  liferay_home: /app/liferay/liferay-dxp-7.4.13.u20/                        #Liferay Home
+  tomcat_version: tomcat-9.0.56                                             #Tomcat Version packaged as part of the LifeRay Update Release
+  tomcat_maxthreads: 1500                                                   #Tomcat Max Thread
+  database_hostname: <db-host>                                              #Database Server Hostname            
+  database_username: <db-user>                                              #Database Server username
+  database_password: <db-password>                                          #Database Server password
+  xms: 16384m                                                               #Initial Heap Memory
+  xmx: 16384m                                                               #Maximum  Heap Memory
+  session_timeout: 60                                                       #Web.xml Session Timeout
+  elasticsearch_password: <elastic-password>                                #Elasticsearch user Password        
+  elasticsearch_master: '"https://<elasticsearch-host>:9200"'               #Elasticsearch Hostname
+  elasticsearch_ssl_password: <elasticsearch-ssl-password>                  #Elasticsearch SSL Password    
+  initialcodecache: 2048m                                                   #JVM Initial Code Cache
+  reservedcodecache: 2048m                                                  #JVM Reserved code Cache        
+  tomcat_internal_proxies: 172\.20\.164\.4|172\.20\.164\.5|172\.20\.161\.65 #Tomcat Proxy IP Used to passthrough Client IPs
+  
