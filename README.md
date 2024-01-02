@@ -19,11 +19,12 @@
 
 
 
-```mermaid
-graph TD
-subgraph A [GRAFANA]
-  X[ZOOKEEPER]
-  Y[KAFKA BROKER]
-  Z[KAFKA TOPICS]
-end
-```
+classDiagram
+namespace GIT Repository {
+    class liferay_application_infrastructure
+	class liferay_elasticsearch_infrastructure
+	class liferay_web_infrastructure
+	class liferay-infrastructure-platform
+	class liferay_application_portal
+	class liferay-platform-platform
+}
