@@ -1,0 +1,6 @@
+- Assumptions
+   - LifeRay uses "/liferay" volume for hosting shared content and "/liferay" is shared across all tomcat servers
+- Pre-Requisites
+   - Artifact Repository
+      - Access to a Binary Artifact Repository (such as Artifactory or Nexus) to store binary files
+      - Credentials to such repository as required
