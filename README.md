@@ -19,3 +19,11 @@
 
 
 
+```mermaid
+graph TD
+subgraph A [GRAFANA]
+  X[ZOOKEEPER]
+  Y[KAFKA BROKER]
+  Z[KAFKA TOPICS]
+end
+```
