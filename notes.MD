@@ -18,70 +18,70 @@
           - ```env_name: <match the env flag in file name>. Can be dev, uat, etc```
    - liferay_elasticsearch_infrastructure
       - files/liferay_<env>_data_dict.yaml
-         - Update this file diligently. Refer to comments for additional information
+         - ```Update this file diligently. Refer to comments for additional information```
       - files/ssl/<env>
          - es_ssl.cfg
-            - Update the DNS Entries. Other values can be provided at run time when executing openssl
+            - ```Update the DNS Entries. Other values can be provided at run time when executing openssl```
          - es_ssl.csr, es_ssl.key
-            - Files Generated when executing openssl command
+            - ```Files Generated when executing openssl command```
          - es_ssl.pem
-            - Signed Certificate
+            - ```Signed Certificate```
          - es_ssl.key.decrypted, es_ssl.key.encrypted
-            - Generate the encrypted and decrypted version of certificate key pair using openssl
+            - ```Generate the encrypted and decrypted version of certificate key pair using openssl```
       - files/kibana/<env>
          - kibana_ssl.cfg
-            - Update the DNS Entries. Other values can be provided at run time when executing openssl
+            - ```Update the DNS Entries. Other values can be provided at run time when executing openssl```
          - kibana_ssl.csr, kibana_ssl.key
-            - Files Generated when executing openssl command
+            - ```Files Generated when executing openssl command```
          - kibana_ssl.pem
-            - Signed Certificate
+            - ```Signed Certificate```
          - kibana_ssl.key.decrypted, kibana_ssl.key.encrypted
-            - Generate the encrypted and decrypted version of certificate key pair using openssl
+            - ```Generate the encrypted and decrypted version of certificate key pair using openssl```
          - elastic-nodes.p12
-            - Elasticsearch Certificate (es_ssl.pem) in P12 Format
+            - ```Elasticsearch Certificate (es_ssl.pem) in P12 Format```
       - files/ssl/
          - ca-chain.pem
-            - Root and Intermediate Certificates of the Signing Authority who generated the SSL certificates
+            - ```Root and Intermediate Certificates of the Signing Authority who generated the SSL certificates```
       - tasks/liferay-es-install-playbook.yaml
-         - Line #4, #5, #6, #11, #12, #13
+         - ```Line #4, #5, #6, #11, #12, #13```
       - tasks/liferay-kibana-install-playbook.yaml
-         - Line #4, #5, #6
+         - ```Line #4, #5, #6```
    - liferay_web_infrastructure
       - files/liferay_<env>_data_dict.yaml
-         - Update this file diligently. Refer to comments for additional information
+         - ```Update this file diligently. Refer to comments for additional information```
       - files/ssl/<env>
          - web_ssl.cfg
-            - Update the DNS Entries. Other values can be provided at run time when executing openssl
+            - ```Update the DNS Entries. Other values can be provided at run time when executing openssl```
          - web_ssl.csr, web_ssl.key
-            - Files Generated when executing openssl command
+            - ```Files Generated when executing openssl command```
          - web_ssl.pem
-            - Signed Certificate
+            - ```Signed Certificate```
          - web_ssl.key.decrypted, web_ssl.key.encrypted
-            - Generate the encrypted and decrypted version of certificate key pair using openssl	
+            - ```Generate the encrypted and decrypted version of certificate key pair using openssl```
    - liferay-infrastructure-platform
       - roles/requirements.yml
-         - Update the GIT Repository URL
+         - ```Update the GIT Repository URL```
    - liferay_application_portal
       - files/liferay_<<env>>_data_dict.yaml
-         - Update this file diligently. Refer to comments for additional information
+         - ```Update this file diligently. Refer to comments for additional information```
       - files/<<env>>/activation.xml
-         - Replace the contents with a valid cluster license
+         - ```Replace the contents with a valid cluster license```
       - files/\<env\>/app_ssl.cfg
-         - Update the DNS Entries. Other values can be provided at run time when executing openssl
+         - ```Update the DNS Entries. Other values can be provided at run time when executing openssl```
       - files/\<env\>/app_ssl.csr, files/\<env\>/app_ssl.key
-         - Files Generated when executing openssl command
+         - ```Files Generated when executing openssl command```
       - files/\<env\>/app_ssl.pem
-         - Signed Certificate
+         - ```Signed Certificate```
       - files/\<env\>/app_ssl.key.encrypted
-         - Generate the encrypted version of certificate key pair using openssl
+         - ```Generate the encrypted version of certificate key pair using openssl```
       - files/\<env\>/elastic-nodes.p12
-         - Copy the Elasticsearch Certificate (es_ssl.pem) in P12 Format generated previously for the elasticsearch cluster
+         - ```Copy the Elasticsearch Certificate (es_ssl.pem) in P12 Format generated previously for the elasticsearch cluster```
       - files/\<env\>/keystore.jks
-         - Placeholder for the Liferay SAML keystore. Replace this after liferay is configured with SAML (Location: $LIFERAY_HOME/data/keystore.jks)
+         - ```Placeholder for the Liferay SAML keystore. Replace this after liferay is configured with SAML (Location: $LIFERAY_HOME/data/keystore.jks)```
       - files/patches/
-         - Copy all the one off patches that should be applied to the instance
+         - ```Copy all the one off patches that should be applied to the instance```
       - files/ca-chain.pem
-         - Root and Intermediate Certificates of the Signing Authority who generated the SSL certificates
+         - ```Root and Intermediate Certificates of the Signing Authority who generated the SSL certificates```
    - liferay-platform-platform
       - roles/requirements.yml
-         - Update the GIT Repository URL
+         - ```Update the GIT Repository URL```
