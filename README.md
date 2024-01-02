@@ -18,25 +18,29 @@
       - liferay_portal_platform
 
 ```mermaid
-classDiagram
-      Animal <|-- Duck
-      Animal <|-- Fish
-      Animal <|-- Zebra
-      Animal : +int age
-      Animal : +String gender
-      Animal: +isMammal()
-      Animal: +mate()
-      class Duck{
-          +String beakColor
-          +swim()
-          +quack()
-      }
-      class Fish{
-          -int sizeInFeet
-          -canEat()
-      }
-      class Zebra{
-          +bool is_wild
-          +run()
-      }
+graph TD
+subgraph X [GIT Repository]
+  A[liferay_application_infrastructure]
+  B[liferay_web_infrastructure]
+  C[liferay_elasticsearch_infrastructure]
+  D[liferay-infrastructure-platform]
+  E[liferay_application_portal]
+  F[liferay-platform-platform]
+end
+subgraph Y [Ansible Tower]
+  G[Infrastructure Project]    
+  H[Portal Project]
+end
+D ---> G
+F ---> H
+style X fill:#f9f,stroke:#333,stroke-width:4px
+style Y fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
+style A fill:#f90,stroke:#333,stroke-width:4px
+style B fill:#f90,stroke:#333,stroke-width:4px
+style C fill:#f90,stroke:#333,stroke-width:4px
+style D fill:#f90,stroke:#333,stroke-width:4px
+style E fill:#290,stroke:#333,stroke-width:4px
+style F fill:#290,stroke:#333,stroke-width:4px
+style G fill:#f90,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
+style H fill:#290,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
 ```
